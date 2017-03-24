@@ -1,0 +1,29 @@
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+<canvas width="1000px" height='1000px' style="width: 100%; height: 100%;">
+	Please get a browser with proper HTML5 support
+</canvas>
+<script>
+"use strict";
+const socket = io.connect("http://127.0.0.1:3000")
+const select = selector => document.querySelector(selector)
+const send = msg => socket.emit('ClientMessage', msg)
+
+// Gets every key the user presses and sends them to the server.
+window.onkeypress = e => send(e.key)
+
+const canvas = select('canvas');
+const context = canvas.getContext('2d')
+
+let doStuff = context.fillText("wubwubwubwub",20,20)
+
+
+context.font="20px Roboto"
+socket.on("ServerMessage", data => {
+context.clearRect(0, 0, canvas.width, canvas.height)
+doStuff = context.fillText(data,20,20)
+})
+
+
+const game = window.setInterval(_=> doStuff, 100)
+</script>
